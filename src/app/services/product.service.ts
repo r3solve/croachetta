@@ -1,22 +1,51 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { Product } from '../models/product.model';
+import { AppwriteService } from './appwrite.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ProductService {
-    products = signal<Product[]>([
-        { id: 1, productName: 'Crop Top', price: 'GHS 80.00', image: '/crop-top-2.webp', category: 'Women' },
-        { id: 2, productName: 'Hand Bag', price: 'GHS 108.00', image: '/bag.webp', category: 'Accessories' },
-        { id: 3, productName: 'Cozy Knit Throw', price: 'GHS 85.00', image: '/crop-top.webp', category: 'Home Decor' },
-        { id: 4, productName: 'Unisex Beannie', price: 'GHS 42.00', image: '/featured-hat.jpeg', category: 'Accessories' }
-    ]);
+    private appwriteService = inject(AppwriteService);
+    products = signal<Product[]>([]);
 
-    addProduct(product: Product) {
+    constructor() {
+        this.loadProducts();
+    }
+
+    async loadProducts() {
+        try {
+            const response = await this.appwriteService.getProducts();
+            const mappedProducts = response.documents.map((doc: any) => ({
+                id: doc.$id,
+                productName: doc.productName,
+                description: doc.description,
+                price: typeof doc.price === 'string' ? doc.price.replace(/GHS\s*/i, '').trim() : doc.price,
+                category: doc.category,
+                image: doc.image,
+                createdAt: doc.$createdAt
+            } as Product));
+            this.products.set(mappedProducts);
+        } catch (error) {
+            console.error('Failed to load products', error);
+        }
+    }
+
+    async addProduct(product: Product) {
+        // Optimistic update or wait for backend? 
+        // Admin side handles adding. This service reflects the global state.
+        // For now, let's assume this service is mainly for reading state in the shop.
+        // If we want to support adding via this service, we should call Appwrite.
+        // But the previous implementation had separate add logic in AdminHomeComponent.
+        // I'll keep the local update method compatible but it might be better to just reload.
         this.products.update(current => [...current, product]);
     }
 
     deleteProduct(id: number | string) {
         this.products.update(current => current.filter(p => p.id !== id));
+    }
+
+    getProduct(id: number | string): Product | undefined {
+        return this.products().find(p => p.id == id);
     }
 }

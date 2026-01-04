@@ -17,6 +17,7 @@ export const routes: Routes = [
         children: [
             { path: '', component: HomeComponent },
             { path: 'shop', component: ShopComponent },
+            { path: 'shop/:id', loadComponent: () => import('./pages/shop/product-detail.component').then(m => m.ProductDetailComponent) },
             { path: 'cart', component: CartComponent },
             { path: 'about', component: AboutComponent },
             { path: 'contact', component: ContactComponent },
@@ -27,6 +28,7 @@ export const routes: Routes = [
         children: [
             { path: '', component: AdminHomeComponent, canActivate: [authGuard] },
             { path: 'home', component: AdminHomeComponent, canActivate: [authGuard] },
+            { path: 'orders', loadComponent: () => import('./pages/admin/admin-orders.component').then(m => m.AdminOrdersComponent), canActivate: [authGuard] },
             { path: 'login', component: LoginComponent }
         ]
     },

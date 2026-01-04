@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-home',
@@ -124,17 +125,17 @@ import { RouterLink } from '@angular/router';
            </div>
 
            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-               @for(item of featuredItems; track item.id) {
-                 <div class="group cursor-pointer">
+               @for(item of featuredItems(); track item.id) {
+                 <a [routerLink]="['/shop', item.id]" class="group cursor-pointer block">
                     <div class="relative overflow-hidden rounded-xl bg-stone-100 aspect-square mb-4">
-                       <img [src]="item.image" [alt]="item.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                       <img [src]="item.image" [alt]="item.productName" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                        <div class="absolute bottom-4 right-4 bg-white rounded-full p-2 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0 duration-300">
                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                        </div>
                     </div>
-                    <h4 class="font-bold text-lg mb-1">{{item.name}}</h4>
-                    <p class="text-stone-500">{{item.price}}</p>
-                 </div>
+                    <h4 class="font-bold text-lg mb-1">{{item.productName}}</h4>
+                    <p class="text-stone-500">GHS {{item.price}}</p>
+                 </a>
                }
            </div>
            
@@ -160,10 +161,14 @@ import { RouterLink } from '@angular/router';
   `
 })
 export class HomeComponent {
-  featuredItems = [
-    { id: 1, name: 'Crop Top', price: 'GHS 80.00', image: '/crop-top-2.webp' },
-    { id: 2, name: 'Hand Bag', price: 'GHS 108.00', image: '/bag.webp' },
-    { id: 3, name: 'Cozy Knit Throw', price: 'GHS 85.00', image: '/crop-top.webp' },
-    { id: 4, name: 'Unisex Beannie', price: 'GHS 42.00', image: '/featured-hat.jpeg' }
-  ];
+  productService = inject(ProductService);
+
+  featuredItems = computed(() => {
+    const products = this.productService.products();
+    if (products.length === 0) return [];
+
+    // Shuffle and pick 5
+    const shuffled = [...products].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 5);
+  });
 }

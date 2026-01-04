@@ -1,10 +1,10 @@
 <div class="pt-28 pb-12 bg-[#FDFBF9] min-h-screen">
     <div class="container mx-auto px-4">
-        <h1 class="text-4xl font-bold text-stone-900 mb-12 text-center">Shop All Toys</h1>
+        <h1 class="text-4xl font-bold text-stone-900 mb-12 text-center">Browser our collection </h1>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             @for(product of products(); track product.id) {
-            <div class="group cursor-pointer">
+            <div class="group cursor-pointer" [routerLink]="['/shop', product.id]">
                 <div
                     class="relative overflow-hidden rounded-xl bg-white aspect-[4/5] mb-4 shadow-sm group-hover:shadow-md transition-all">
                     <img [src]="product.image" [alt]="product.productName"
@@ -19,8 +19,11 @@
                         </svg>
                     </button>
                 </div>
-                <h3 class="font-medium text-stone-900 text-lg">{{product.productName}}</h3>
-                <p class="text-stone-500">{{product.price}}</p>
+                <h3 class="font-medium text-stone-900 text-lg mb-1">{{product.productName}}</h3>
+                <p class="text-sm text-stone-500 mb-2 line-clamp-2">{{product.description || 'No description
+                    available'}}
+                </p>
+                <p class="text-stone-900 font-bold">GHS {{product.price}}</p>
             </div>
             }
         </div>

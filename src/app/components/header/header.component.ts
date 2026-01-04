@@ -10,7 +10,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
       <div class="container mx-auto px-4 h-20 flex items-center justify-between">
         <!-- Logo -->
         <a routerLink="/" class="text-2xl font-bold text-stone-800 tracking-tight">
-          Yarns & Needle
+          Meena
         </a>
 
         <!-- Desktop Navigation -->
@@ -31,6 +31,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
               <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
             </svg>
           </a>
+         
         </div>
       </div>
     </header>

@@ -30,7 +30,9 @@ import { Product } from '../../models/product.model';
           <thead class="bg-stone-50 border-b border-stone-200">
             <tr>
               <th class="p-4 font-medium text-stone-600">Product</th>
+              <th class="p-4 font-medium text-stone-600">Description</th>
               <th class="p-4 font-medium text-stone-600">Category</th>
+              <th class="p-4 font-medium text-stone-600">Date Added</th>
               <th class="p-4 font-medium text-stone-600">Price</th>
               <th class="p-4 font-medium text-stone-600 text-right">Actions</th>
             </tr>
@@ -44,12 +46,19 @@ import { Product } from '../../models/product.model';
                   <span class="font-medium text-stone-900">{{product.productName}}</span>
                 </div>
               </td>
+              <td class="p-4 text-stone-600 max-w-xs truncate" title="{{product.description}}">{{product.description || '-'}}</td>
               <td class="p-4 text-stone-600">{{product.category}}</td>
+              <td class="p-4 text-stone-600">{{product.createdAt | date:'mediumDate'}}</td>
               <td class="p-4 text-stone-600">{{product.price}}</td>
               <td class="p-4 text-right">
-                <button (click)="deleteProduct(product.id)" class="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded">
-                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                </button>
+                <div class="flex justify-end gap-2">
+                    <button disabled class="px-3 py-1 bg-stone-100 text-stone-400 rounded cursor-not-allowed text-sm font-medium">
+                        Update
+                    </button>
+                    <button (click)="deleteProduct(product.id)" class="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 text-sm font-medium transition-colors">
+                        Delete
+                    </button>
+                </div>
               </td>
             </tr>
             }
@@ -153,7 +162,8 @@ export class AdminHomeComponent implements OnInit {
         description: doc.description,
         price: doc.price,
         category: doc.category,
-        image: doc.image
+        image: doc.image,
+        createdAt: doc.$createdAt
       } as Product));
       this.products.set(mappedProducts);
     } catch (error) {

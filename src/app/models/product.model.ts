@@ -5,4 +5,6 @@ export interface Product {
     image: string;
     category?: string;
     isNew?: boolean;
+    description?: string;
+    createdAt?: string;
 }

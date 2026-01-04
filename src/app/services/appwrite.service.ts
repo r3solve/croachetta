@@ -95,4 +95,51 @@ export class AppwriteService {
             throw error;
         }
     }
+    async createOrder(orderData: any): Promise<any> {
+        try {
+            const databaseId = '695126ec00199061ee6e';
+            const collectionId = 'orders';
+
+            return await this.databases.createDocument(
+                databaseId,
+                collectionId,
+                ID.unique(),
+                orderData
+            );
+        } catch (error) {
+            console.error('Error creating order:', error);
+            throw error;
+        }
+    }
+
+    async getOrders(): Promise<any> {
+        try {
+            const databaseId = '695126ec00199061ee6e';
+            const collectionId = 'orders';
+
+            return await this.databases.listDocuments(
+                databaseId,
+                collectionId
+            );
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+            throw error;
+        }
+    }
+
+    async deleteOrder(documentId: string): Promise<any> {
+        try {
+            const databaseId = '695126ec00199061ee6e';
+            const collectionId = 'orders';
+
+            return await this.databases.deleteDocument(
+                databaseId,
+                collectionId,
+                documentId
+            );
+        } catch (error) {
+            console.error('Error deleting order:', error);
+            throw error;
+        }
+    }
 }
