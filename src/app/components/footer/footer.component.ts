@@ -12,7 +12,7 @@ import { RouterLink } from '@angular/router';
           <div>
             <h3 class="font-bold text-stone-900 mb-4 text-lg">Meena</h3>
             <p class="text-sm leading-relaxed max-w-xs">
-              Handmade crochet toys made with love and care for your little ones.
+              Handmade crochet items made with love and care for your little ones.
             </p>
           </div>
           
